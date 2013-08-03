@@ -46,7 +46,13 @@ class Legislator < ActiveRecord::Base
       end
     end
   end
+  
+  def self.destroy_all_inactive
+    self.where(:in_office => "0").destroy_all
+  end
 
 end
 
 Legislator.state_by_legislators_count
+Legislator.destroy_all_inactive
+Legislator.total_representatives
