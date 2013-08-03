@@ -33,6 +33,20 @@ class Legislator < ActiveRecord::Base
     puts "Representatives: #{house_count}"
   end
 
+
+  def self.state_by_legislators_count
+    total_in_office = self.select(:id, :state).where(:in_office => "1")
+    grouped_by_state = total_in_office.group(:state).count
+    by_count = grouped_by_state.sort_by { |state, count| count }.reverse
+    by_count.each do |state_count|
+      if state_count[1] > 2
+        puts "#{state_count[0]}: Senators: 2, #{state_count[1] - 2} Reperesentative(s)"
+      else 
+        puts "#{state_count[0]}: #{state_count[1]} Representative(s)"
+      end
+    end
+  end
+
 end
 
-Legislator.total_representatives
+Legislator.state_by_legislators_count
